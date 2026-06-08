@@ -1,0 +1,66 @@
+library(dplyr)
+library(tibble)
+library(ggplot2)
+library(readxl)
+library(ggrepel)
+
+#1.Introduction and Preparation
+file_path <- "..."
+data <- read_excel(file_path, sheet = "name")
+colnames(data)[1] <- "Feature"
+data <- data %>% filter(!is.na(Feature))
+
+group1 <- c("B1", "B2", "B3", "B4")
+group2 <- c("D1", "D2", "D3", "D4")
+
+data <- data %>% mutate(across(all_of(c(group1, group2)), as.numeric))
+
+# 2. Calculations
+log2FC <- log2(rowMeans(data[, group2], na.rm = TRUE) / rowMeans(data[, group1], na.rm = TRUE))
+pvals <- apply(data[, c(group1, group2)], 1, function(x) {
+  t.test(as.numeric(x[1:4]), as.numeric(x[5:8]))$p.value
+})
+
+df <- data.frame(
+  Feature = data$Feature,
+  log2FC = log2FC,
+  pval = pvals,
+  negLog10P = -log10(pvals)
+)
+
+# Color coding: Green for significant results (p < 0.05), Red for non-significant results.
+df$color <- ifelse(df$pval < 0.05, "green", "red")
+
+# 3. Volcano Plot 
+ggplot(df, aes(x = log2FC, y = negLog10P)) +
+  geom_point(aes(color = color), size = 3) + 
+  scale_color_identity() +
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype = "dashed") +
+  geom_vline(xintercept = 0, linetype = "solid", color = "grey") +
+  
+  
+  geom_text_repel(
+    data = subset(df, pval < 0.05), # Επιλέγει μόνο τα πράσινα σημεία
+    aes(label = Feature),
+    size = 5,                 
+    fontface = "bold",
+    color = "black",
+    max.overlaps = Inf,       
+    box.padding = 0.6,        
+    point.padding = 0.3,      
+    segment.thickness = 0.5,  
+    segment.color = "grey30"
+  ) +
+  labs(
+    x = "log2(Fold Change)", 
+    y = "-log10(p-value)",
+    title = "Dihydrosphingomyelin",                   
+    subtitle = "Healthy APOE4/4 - AD APOE4/4" 
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold", hjust = 0.5), 
+    plot.subtitle = element_text(size = 13, italic = TRUE, hjust = 0.5, color = "grey30"), 
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16)
+  )
