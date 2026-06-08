@@ -1,0 +1,56 @@
+# library
+library(ggplot2)
+library(ggsignif)
+library(readxl)
+library(dplyr)
+library(tidyr)
+
+# file path
+file_path <- "C:/Users/..."
+
+# load data from Excel
+data <- read_excel(file_path, sheet = "name")
+
+# load library
+library(ggplot2)
+library(factoextra)
+
+#Healthy APOE4/4 - Healthy APOE2/E3
+
+selected_data <- data[, c(22, 23)]
+
+# Converting data into numerical values.
+selected_data_num <- as.matrix(sapply(selected_data, as.numeric))
+
+# Detection of infinite or missing values.
+print("Checking for missing or infinite values:")
+print(any(is.na(selected_data_num) | is.infinite(selected_data_num)))
+
+# Replace NA or Inf values with 0 (if present)
+selected_data_num[is.na(selected_data_num) | is.infinite(selected_data_num)] <- 0
+
+# PCA
+pca_result <- prcomp(selected_data_num, scale. = TRUE)
+
+# Display the results of PCA
+print("PCA Summary:")
+print(summary(pca_result))
+
+# We create the group with the same size as the number of rows in selected_data.
+group <- factor(rep(c("Healthy APOE4/4", "Healthy"), length.out = nrow(selected_data_num)))
+
+# Check the group to ensure it has the correct size.
+print(length(group))  # It must be equal to the number of rows in selected_data_num.
+print(length(selected_data_num))  # Check that it has the same size.
+
+# Visualization of Samples (Individuals) - Healthy APOE4/4 - Healthy APOE2/E3
+fviz_pca_ind(
+  pca_result,
+  title = "PCA: NSer-%T-lip Healthy APOE4/4 vs Healthy",
+  repel = TRUE,                     # Αποφυγή επικάλυψης κειμένου
+  geom.ind = "point",               # Σημεία για δείγματα
+  col.ind = group,                  # Χρωματισμός ανά ομάδα
+  palette = c("#0072B2", "#D55E00"),# Χρωματική παλέτα
+  addEllipses = TRUE,               # Προσθήκη ελλείψεων
+  ellipse.type = "confidence"       # Ελλείψεις εμπιστοσύνης
+)
