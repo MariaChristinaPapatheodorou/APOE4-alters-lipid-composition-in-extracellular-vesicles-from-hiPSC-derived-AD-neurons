@@ -43,7 +43,8 @@ group <- factor(rep(c("Healthy APOE4/4", "Healthy"), length.out = nrow(selected_
 print(length(group))  # It must be equal to the number of rows in selected_data_num.
 print(length(selected_data_num))  # Check that it has the same size.
 
-# Visualization of Samples (Individuals) - Healthy APOE4/4 - Healthy APOE2/E3
+# Visualization of Samples (Individuals) - Healthy APOE4/4 - Healthy APOE2/E3.
+#The same procedure is applied to all remaining comparisons.
 fviz_pca_ind(
   pca_result,
   title = "PCA: NSer-%T-lip Healthy APOE4/4 vs Healthy",
