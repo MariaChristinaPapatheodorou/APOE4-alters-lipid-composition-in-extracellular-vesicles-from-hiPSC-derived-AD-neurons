@@ -1,0 +1,70 @@
+library(ggplot2)
+library(ggsignif)
+library(stringr)
+
+all_axis_size  <- 16  
+signif_text_sz <- 8    
+line_thick     <- 0.8  
+
+# ---------------------------------------------------------
+df <- data.frame(
+  Group = c("healthy APOE2/E3", "healthy APOE4/4", 
+            "AD APOE3/3", "AD APOE4/4"),
+  Mean  = c(31.60, 26.91, 28.37, 24.72), #values
+  SD    = c(2.38, 2.95, 3.81, 6.67) #values
+)
+
+df$Group <- factor(df$Group, 
+                   levels = c("healthy APOE2/E3", "healthy APOE4/4", 
+                              "AD APOE3/3", "AD APOE4/4"))
+
+# (C vs B)
+y_sig <- max(df$Mean[1:2] + df$SD[1:2]) + 1.5 
+
+# ---------------------------------------------------------
+# 3. PLOT
+# ---------------------------------------------------------
+p <- ggplot(df, aes(x = Group, y = Mean)) +
+  
+  
+  geom_col(width = 0.65, color = "black", fill = "#008079", linewidth = 0.5) +
+  
+  # Error bars (SD)
+  geom_errorbar(aes(ymin = Mean - SD, ymax = Mean + SD), 
+                width = 0.15, linewidth = line_thick, color = "black") +
+  
+  # Wrapping 
+  scale_x_discrete(labels = function(x) str_wrap(as.character(x), width = 12)) +
+  
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  
+  theme_classic() + 
+  
+  theme(
+    axis.text.x  = element_text(size = all_axis_size, color = "black", family = "sans", margin = ggplot2::margin(t = 8)),
+    axis.text.y  = element_text(size = all_axis_size, color = "black", family = "sans"),
+    
+    
+    axis.title.y = element_text(size = all_axis_size, color = "black", family = "sans", margin = ggplot2::margin(r = 12)),
+    axis.title.x = element_blank(), 
+    
+   
+    axis.line    = element_line(linewidth = line_thick, color = "black"),
+    axis.ticks   = element_line(linewidth = line_thick, color = "black"),
+    
+    plot.margin  = ggplot2::margin(15, 15, 15, 15)
+  ) +
+  
+  labs(y = "group name") +
+  
+  #(p=0.0449)
+  geom_signif(
+    comparisons = list(c("healthy APOE2/E3", "healthy APOE4/4")),
+    annotations = "*",
+    y_position = y_sig,
+    tip_length = 0.03,
+    textsize = signif_text_sz,
+    color = "red" 
+  )
+
+print(p)
