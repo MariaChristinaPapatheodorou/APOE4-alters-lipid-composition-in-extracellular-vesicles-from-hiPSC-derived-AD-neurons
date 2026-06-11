@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains all the code used for the analyses of our study, which investigates how the **APOE4 genotype** influences lipid composition in both healthy individuals and patients with Alzheimer’s disease.
+This repository contains all the code used for the analyses of our study, which investigates how the **APOE4 genotype** influences lipid composition in both Unimpaired individuals and patients with Alzheimer’s disease.
 
 APOE4 is one of the strongest genetic risk factors for late-onset Alzheimer’s disease. However, the mechanisms through which it contributes to pathology are not yet fully understood. In this study, we focus on how APOE4 may affect neuronal lipid handling, with the aim of understanding early molecular changes associated with disease risk.
 
@@ -14,8 +14,8 @@ Here, the complete analytical workflow used in this study is provided, including
 
 The analyses are based on lipidomic profiles of extracellular vesicles derived from hiPSC-derived neurons across four experimental conditions:
 
-- Healthy APOE2/E3  
-- Healthy APOE4/4  
+- UNIMPAIRED APOE2/E3  
+- UNIMPAIRED APOE4/4  
 - Alzheimer’s APOE3/3  
 - Alzheimer’s APOE4/4  
 
