@@ -15,7 +15,7 @@ data <- read_excel(file_path, sheet = "name")
 library(ggplot2)
 library(factoextra)
 
-#Healthy APOE4/4 - Healthy APOE2/E3
+#UNIMPAIRED APOE4/4 - UNIMPAIRED APOE2/E3
 
 selected_data <- data[, c(22, 23)]
 
@@ -37,17 +37,17 @@ print("PCA Summary:")
 print(summary(pca_result))
 
 # We create the group with the same size as the number of rows in selected_data.
-group <- factor(rep(c("Healthy APOE4/4", "Healthy"), length.out = nrow(selected_data_num)))
+group <- factor(rep(c("UNIMPAIRED APOE4/4", "UNIMPAIRED"), length.out = nrow(selected_data_num)))
 
 # Check the group to ensure it has the correct size.
 print(length(group))  # It must be equal to the number of rows in selected_data_num.
 print(length(selected_data_num))  # Check that it has the same size.
 
-# Visualization of Samples (Individuals) - Healthy APOE4/4 - Healthy APOE2/E3.
+# Visualization of Samples (Individuals) - UNIMPAIRED APOE4/4 - UNIMPAIRED APOE2/E3.
 #The same procedure is applied to all remaining comparisons.
 fviz_pca_ind(
   pca_result,
-  title = "PCA: NSer-%T-lip Healthy APOE4/4 vs Healthy",
+  title = "PCA: NSer-%T-lip UNIMPAIRED APOE4/4 vs UNIMPAIRED",
   repel = TRUE,                     # Αποφυγή επικάλυψης κειμένου
   geom.ind = "point",               # Σημεία για δείγματα
   col.ind = group,                  # Χρωματισμός ανά ομάδα
