@@ -8,14 +8,14 @@ line_thick     <- 0.8
 
 # ---------------------------------------------------------
 df <- data.frame(
-  Group = c("healthy APOE2/E3", "healthy APOE4/4", 
+  Group = c("UNIMPAIRED APOE2/E3", "UNIMPAIRED APOE4/4", 
             "AD APOE3/3", "AD APOE4/4"),
   Mean  = c(31.60, 26.91, 28.37, 24.72), #values
   SD    = c(2.38, 2.95, 3.81, 6.67) #values
 )
 
 df$Group <- factor(df$Group, 
-                   levels = c("healthy APOE2/E3", "healthy APOE4/4", 
+                   levels = c("UNIMPAIRED APOE2/E3", "UNIMPAIRED APOE4/4", 
                               "AD APOE3/3", "AD APOE4/4"))
 
 # (C vs B)
